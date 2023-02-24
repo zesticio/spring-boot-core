@@ -1,0 +1,12 @@
+package in.zestic.core.annotations;
+
+import in.zestic.core.annotation.NotNull;
+
+public class TestNotNull {
+
+  @NotNull(message = "Value cannot be null")
+  private String name = null;
+
+  public static void main(String[] args) {
+  }
+}

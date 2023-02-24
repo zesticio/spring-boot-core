@@ -18,6 +18,7 @@
 
 package in.zestic.core.handlers;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.core.Ordered;
@@ -27,13 +28,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import in.zestic.core.entity.Result;
 
-public class BaseGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-  private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(BaseGlobalExceptionHandler.class);
+  private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -52,12 +54,21 @@ public class BaseGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   @Order(Ordered.LOWEST_PRECEDENCE)
-  public final ResponseEntity<Result> exceptionHandler(Exception ex, WebRequest request) {
+  public final ResponseEntity<Result> exceptionHandler(Exception ex,
+                                                       WebRequest request) {
     logger.error("Internal error.", ex);
     return createErrorResponseEntity(ex, HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
   }
 
-  protected ResponseEntity<Result> createErrorResponseEntity(Exception exception, HttpStatus status, Integer code) {
+  @ExceptionHandler(ConstraintViolationException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  String handleConstraintViolationException(ConstraintViolationException e) {
+    return "Validation error: " + e.getMessage();
+  }
+
+  protected ResponseEntity<Result> createErrorResponseEntity(Exception exception,
+                                                             HttpStatus status,
+                                                             Integer code) {
     logger.error(String.format("Error: %s with code: %d", exception.getMessage(), code), exception);
     Result<Void> result = new Result(code, exception.getMessage());
     ResponseEntity<Result> response = new ResponseEntity<>(result, status);
