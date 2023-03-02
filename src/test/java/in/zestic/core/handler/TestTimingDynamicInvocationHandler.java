@@ -1,9 +1,9 @@
-package in.zestic.core.handler;
+package io.zestic.core.handler;
 
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
-import in.zestic.core.handlers.TimingDynamicInvocationHandler;
+import io.zestic.core.handlers.TimingDynamicInvocationHandler;
 
 public class TestTimingDynamicInvocationHandler {
 

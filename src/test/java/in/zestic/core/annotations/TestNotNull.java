@@ -1,6 +1,6 @@
-package in.zestic.core.annotations;
+package io.zestic.core.annotations;
 
-import in.zestic.core.annotation.NotNull;
+import io.zestic.core.annotation.NotNull;
 
 public class TestNotNull {
 
