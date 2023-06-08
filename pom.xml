@@ -5,13 +5,18 @@
     <parent>
         <groupId>io.zestic</groupId>
         <artifactId>spring-boot-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.4</version>
     </parent>
     <groupId>io.zestic</groupId>
     <artifactId>spring-boot-core</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.3</version>
     <name>spring-boot-core</name>
     <description>spring-boot-core</description>
+
+    <properties>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -21,7 +26,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>

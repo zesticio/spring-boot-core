@@ -16,15 +16,13 @@
  * limitations under the License.
  */
 
-package io.zestic.core.exception;
+package io.zestic.core.util;
 
-public class TerminatingZeroNotFoundException extends Exception {
-    public TerminatingZeroNotFoundException() {
-        super("Terminating zero not found in buffer.");
-    }
+import io.zestic.core.annotation.NotNull;
 
-    public TerminatingZeroNotFoundException(String s) {
-        super(s);
-    }
+@FunctionalInterface
+public interface IBuilder<T> {
 
+    @NotNull
+    T build();
 }

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.zestic.core.entity;
+package io.zestic.core.pdu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import io.zestic.core.util.HTTPErrorCodes;
 /**
  * Error code for USER module.
  */
-public enum MessageType {
+public enum PduType {
 
   TEXT_MESSAGE(0x100000, "Test Message"),
   OBJECT_MESSAGE(0x100001, "Object Message");
@@ -42,7 +42,7 @@ public enum MessageType {
 
   private final String message;
 
-  private MessageType(final Integer code, final String message) {
+  private PduType(final Integer code, final String message) {
     this.code = code;
     this.message = message;
   }

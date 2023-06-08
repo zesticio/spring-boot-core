@@ -16,14 +16,15 @@
  * limitations under the License.
  */
 
-package io.zestic.core.annotation;
+package io.zestic.core.util;
 
-import java.lang.annotation.*;
+/**
+ * Low level memory access
+ */
+public interface Memory {
 
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
-public @interface Alias {
-
-    String value();
+    default long heapUsed() {
+        Runtime runtime = Runtime.getRuntime();
+        return runtime.totalMemory() - runtime.freeMemory();
+    }
 }

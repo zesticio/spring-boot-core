@@ -18,9 +18,7 @@
 
 package io.zestic.core.handlers;
 
-import javax.validation.ConstraintViolationException;
-import java.util.List;
-import java.util.stream.Collectors;
+import io.zestic.core.entity.Result;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -31,47 +29,52 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import io.zestic.core.entity.Result;
+
+import javax.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-  private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-  @Override
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                HttpHeaders headers,
-                                                                HttpStatus status,
-                                                                WebRequest request) {
-    List<String> errors = ex.getBindingResult()
-        .getFieldErrors()
-        .stream()
-        .map(x -> x.getDefaultMessage())
-        .collect(Collectors.toList());
-    Result<List<String>> result = new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
-    result.setData(errors);
-    return new ResponseEntity<>(result, headers, status);
-  }
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(x -> x.getDefaultMessage())
+                .collect(Collectors.toList());
+        Result<List<String>> result = new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+        result.setData(errors);
+        return new ResponseEntity<>(result, headers, status);
+    }
 
-  @ExceptionHandler(Exception.class)
-  @Order(Ordered.LOWEST_PRECEDENCE)
-  public final ResponseEntity<Result> exceptionHandler(Exception ex,
-                                                       WebRequest request) {
-    logger.error("Internal error.", ex);
-    return createErrorResponseEntity(ex, HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
-  }
+    @ExceptionHandler(Exception.class)
+    @Order(Ordered.LOWEST_PRECEDENCE)
+    public final ResponseEntity<Result> exceptionHandler(Exception ex,
+                                                         WebRequest request) {
+        logger.error("Internal error.", ex);
+        return createErrorResponseEntity(ex,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                HttpStatus.INTERNAL_SERVER_ERROR.value());
+    }
 
-  @ExceptionHandler(ConstraintViolationException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  String handleConstraintViolationException(ConstraintViolationException e) {
-    return "Validation error: " + e.getMessage();
-  }
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String handleConstraintViolationException(ConstraintViolationException e) {
+        return "Validation error: " + e.getMessage();
+    }
 
-  protected ResponseEntity<Result> createErrorResponseEntity(Exception exception,
-                                                             HttpStatus status,
-                                                             Integer code) {
-    logger.error(String.format("Error: %s with code: %d", exception.getMessage(), code), exception);
-    Result<Void> result = new Result(code, exception.getMessage());
-    ResponseEntity<Result> response = new ResponseEntity<>(result, status);
-    return response;
-  }
+    protected ResponseEntity<Result> createErrorResponseEntity(Exception exception,
+                                                               HttpStatus status,
+                                                               Integer code) {
+        logger.error(String.format("Error: %s with code: %d", exception.getMessage(), code), exception);
+        Result<Void> result = new Result(code, exception.getMessage());
+        ResponseEntity<Result> response = new ResponseEntity<>(result, status);
+        return response;
+    }
 }

@@ -75,7 +75,6 @@ public abstract class ProcessingThread implements Runnable {
     @Override
     public void run() {
         try {
-            System.err.println("inside run");
             setProcessingStatus(PROC_RECEIVING);
             while (keepProcessing) {
                 process();
