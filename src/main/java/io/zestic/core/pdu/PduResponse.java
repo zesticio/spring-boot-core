@@ -59,11 +59,7 @@ public class PduResponse extends Pdu {
     }
 
     @Override
-    public void setData(ByteBuffer buffer) throws PduException, NotEnoughDataInByteBufferException, TerminatingZeroNotFoundException {
-    }
-
-    @Override
-    public ByteBuffer getData() throws ValueNotSetException {
-        return null;
+    public String toString() {
+        return super.toString();
     }
 }

@@ -47,10 +47,10 @@ public class TlvInteger extends Tlv {
         }
     }
 
-    public String debugString() {
+    public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append("int:");
-        buffer.append(super.debugString());
+        buffer.append(super.toString());
         buffer.append(String.format("%s", value));
         return buffer.toString();
     }

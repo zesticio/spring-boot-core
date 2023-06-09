@@ -19,6 +19,7 @@
 package io.zestic.core.queue;
 
 import io.zestic.core.pdu.Pdu;
+import io.zestic.core.util.IBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +65,12 @@ public class Queue {
             (byte) 0x77};
     private ConcurrentLinkedQueue<Pdu> queue;
     private Integer counter = 0;
+
+    public Queue() {
+    }
+
+    public Queue(Builder builder) {
+    }
 
     /**
      * The below function will create an IndexedChronicle which creates two RandomAccessFiles one for indexes
@@ -131,5 +138,19 @@ public class Queue {
      */
     public void close() {
         queue.clear();
+    }
+
+    public Boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
+    public static class Builder implements IBuilder<Queue> {
+
+        @Override
+        public Queue build() {
+            Queue queue = new Queue(this);
+            queue.create();
+            return queue;
+        }
     }
 }

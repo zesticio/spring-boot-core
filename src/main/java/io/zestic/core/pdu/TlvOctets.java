@@ -73,10 +73,10 @@ public class TlvOctets extends Tlv {
     }
 
     @Override
-    public String debugString() {
+    public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append("oct:");
-        buffer.append(super.debugString());
+        buffer.append(super.toString());
         if (value == null) {
             buffer.append(String.format("%s", "NULL"));
         } else {

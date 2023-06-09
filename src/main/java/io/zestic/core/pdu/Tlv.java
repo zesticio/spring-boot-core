@@ -232,17 +232,10 @@ public abstract class Tlv extends ByteData {
         checkLength(length);
     }
 
-    /**
-     * Returns more specific debug info about this TLV.
-     *
-     * @return
-     * @see ByteData#debugString()
-     */
     @Override
-    public String debugString() {
+    public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append("tlv ");
-        buffer.append(super.debugString());
         buffer.append(String.format("%s", tag));
         return buffer.toString();
     }

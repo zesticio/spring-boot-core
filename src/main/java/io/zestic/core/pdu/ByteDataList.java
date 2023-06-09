@@ -105,13 +105,13 @@ public abstract class ByteDataList extends ByteData {
     }
 
     @Override
-    public String debugString() {
+    public String toString() {
         StringBuilder buffer = new StringBuilder();
         int count = getCount();
         buffer.append(String.format("%s %d ", "count", count));
         for (int i = 0; i < count; i++) {
             ByteData value = getValue(i);
-            buffer.append(String.format("%s %d ", (i + 1), value.debugString()));
+            buffer.append(String.format("%s %d ", (i + 1), value.toString()));
         }
         return buffer.toString();
     }

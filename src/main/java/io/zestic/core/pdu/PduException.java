@@ -28,7 +28,7 @@ public class PduException extends Exception {
     public String toString() {
         String s = super.toString();
         if (pdu != null) {
-            s += "\nPDU debug string: " + pdu.toHex();
+            s += "\nPDU debug string: " + pdu.hexDump();
         }
         return s;
     }

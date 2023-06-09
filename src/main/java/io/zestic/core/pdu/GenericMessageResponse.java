@@ -34,7 +34,7 @@ public class GenericMessageResponse extends PduResponse {
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append(String.format("%-50s", "submit-multi-resp"));
-        buffer.append(String.format("%-50s", super.debugString()));
+        buffer.append(String.format("%-50s", super.toString()));
         buffer.append(String.format("%-20s%-30s", "message-id", getMessageId()));
         return buffer.toString();
     }

@@ -355,7 +355,7 @@ public abstract class Pdu extends ByteData {
         setCommandLength(bodyBuf.length() + Constants.PDU_HEADER_LENGTH);
         ByteBuffer pduBuf = getHeader();
         pduBuf.appendBuffer(bodyBuf);
-        //logger.debug("PDU.getData() build up data " + pduBuf.getHexDump());
+        logger.debug("data " + pduBuf.getHexDump());
         return pduBuf;
     }
 
@@ -452,11 +452,47 @@ public abstract class Pdu extends ByteData {
         }
     }
 
+    /**
+     * Returns debug string from provided optional parameters.
+     *
+     * @param label
+     * @param optionalParameters
+     * @return
+     */
+    protected String debugStringOptional(String label, Vector optionalParameters) {
+        StringBuilder buffer = new StringBuilder();
+        int size = optionalParameters.size();
+        if (size > 0) {
+            buffer.append(String.format("%s ", label));
+            Tlv tlv = null;
+            for (int i = 0; i < size; i++) {
+                tlv = (Tlv) optionalParameters.get(i);
+                if ((tlv != null) && (tlv.hasValue())) {
+                    buffer.append(String.format("%s ", tlv.toString()));
+                }
+            }
+        }
+        return buffer.toString();
+    }
+
+    /**
+     * Returns debug string of all optional parameters.
+     *
+     * @return
+     */
+    protected String debugStringOptional() {
+        String dbgs = "";
+        dbgs += debugStringOptional("opt", optionalParameters);
+        dbgs += debugStringOptional("extraopt", extraOptionalParameters);
+        return dbgs;
+    }
+
+
     public byte[] toBytes() {
         return SerializationUtils.serialize(this);
     }
 
-    public String toHex() {
+    public String hexDump() {
         return HexUtil.toHexString(toBytes());
     }
 
@@ -483,5 +519,37 @@ public abstract class Pdu extends ByteData {
         ));
         buffer.append("]");
         return buffer.toString();
+    }
+
+    public static String hexdump(byte[] data) {
+        final int perRow = 16;
+
+        final String hexChars = "0123456789ABCDEF";
+        StringBuilder dump = new StringBuilder();
+        StringBuilder chars = null;
+        for (int i = 0; i < data.length; i++) {
+            int offset = i % perRow;
+            if (offset == 0) {
+                chars = new StringBuilder();
+                dump.append(String.format("%04x", i))
+                        .append("  ");
+            }
+
+            int b = data[i] & 0xFF;
+            dump.append(hexChars.charAt(b >>> 4))
+                    .append(hexChars.charAt(b & 0xF))
+                    .append(' ');
+
+            chars.append((char) ((b >= ' ' && b <= '~') ? b : '.'));
+
+            if (i == data.length - 1 || offset == perRow - 1) {
+                for (int j = perRow - offset - 1; j > 0; j--)
+                    dump.append("-- ");
+                dump.append("  ")
+                        .append(chars)
+                        .append('\n');
+            }
+        }
+        return dump.toString();
     }
 }

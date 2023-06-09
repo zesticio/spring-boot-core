@@ -67,4 +67,8 @@ public abstract class PduRequest<R extends PduResponse> extends Pdu {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

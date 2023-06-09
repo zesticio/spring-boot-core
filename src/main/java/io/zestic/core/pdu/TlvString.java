@@ -66,10 +66,10 @@ public class TlvString extends Tlv {
     }
 
     @Override
-    public String debugString() {
+    public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append("string:");
-        buffer.append(super.debugString());
+        buffer.append(super.toString());
         buffer.append(String.format("%s", value));
         return buffer.toString();
     }

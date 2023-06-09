@@ -15,10 +15,10 @@ public class EnquireLinkResponse extends PduResponse {
         return null;
     }
 
-    public String toHex() {
+    public String hexDump() {
         StringBuilder buffer = new StringBuilder();
         buffer.append(String.format("%-50s", "enquire-link-response"));
-        buffer.append(String.format("%-50s", super.debugString()));
+        buffer.append(String.format("%-50s", super.toString()));
         return buffer.toString();
     }
 }

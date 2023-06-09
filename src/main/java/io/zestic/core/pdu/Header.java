@@ -19,7 +19,6 @@
 package io.zestic.core.pdu;
 
 import io.zestic.core.exception.GenericError;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -29,17 +28,17 @@ public class Header implements Serializable {
     /**
      * The command length field defines the total octet length of the PDU packet including the length field
      */
-    private Integer commandLength = 0;
+    private Integer commandLength = 0x00;
     /**
      * The command id field identifies the particular PDU. A unique identifier must be allocated to each PDU in the
      * range 0x00000000 to 0xooooo1FF
      * A unique command identifier must be added to each response PDU in the rage 0x80000000 to 0x800001FF
      */
-    private Integer commandId = 0;
+    private Integer commandId = Constants.DEFAULT_COMMAND_ID;
     /**
      * The command_status field indicates the success or failure of an SMPP request.
      */
-    private Integer commandStatus = GenericError.ROK.getCode();
+    private Integer commandStatus = Constants.STATUS_OK;
 
     private Integer sequenceNumber = 1;
 
@@ -55,43 +54,44 @@ public class Header implements Serializable {
         return buffer;
     }
 
-    public void setData(ByteBuffer buffer) throws NotEnoughDataInByteBufferException, TerminatingZeroNotFoundException, UnsupportedEncodingException {
+    public void setData(ByteBuffer buffer) throws NotEnoughDataInByteBufferException,
+            TerminatingZeroNotFoundException,
+            UnsupportedEncodingException {
         setCommandLength(buffer.removeInt());
         setCommandId(buffer.removeInt());
         setCommandStatus(buffer.removeInt());
         setSequenceNumber(buffer.removeInt());
     }
 
-    public int getCommandLength() {
+    public Integer getCommandLength() {
         return commandLength;
     }
 
-    public int getCommandId() {
+    public Integer getCommandId() {
         return commandId;
     }
 
-    public int getCommandStatus() {
+    public Integer getCommandStatus() {
         return commandStatus;
     }
 
-    public int getSequenceNumber() {
+    public Integer getSequenceNumber() {
         return sequenceNumber;
     }
 
-    public void setCommandLength(int commandLength) {
+    public void setCommandLength(Integer commandLength) {
         this.commandLength = commandLength;
     }
 
-    public void setCommandId(int commandId) {
+    public void setCommandId(Integer commandId) {
         this.commandId = commandId;
     }
 
-    public void setCommandStatus(int cmdStatus) {
+    public void setCommandStatus(Integer cmdStatus) {
         this.commandStatus = cmdStatus;
     }
 
     public void setSequenceNumber(Integer sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
     }
-
 }

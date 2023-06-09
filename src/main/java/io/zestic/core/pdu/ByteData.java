@@ -356,15 +356,4 @@ public abstract class ByteData implements Serializable {
             return (short) (-(65536 - positive));
         }
     }
-
-    /**
-     * Returns human readable version of the data carried by the object. Derived
-     * classes should override this method with possible inclusion of result of
-     * <code>super.debugString()</code>.
-     *
-     * @return the textual form of the content of the object
-     */
-    public String debugString() {
-        return new String("");
-    }
 }

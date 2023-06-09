@@ -14,6 +14,7 @@ public class Constants {
     public static final int TLV_HEADER_SIZE = 4; // 2 shorts: tag & length
 
     //Command set
+    public static final Integer DEFAULT_COMMAND_ID = 0x00000000;
     public static final Integer ENQUIRE_LINK = 0x00000001;
     public static final Integer ENQUIRE_LINK_RESP = 0x80000001;
     public static final Integer GENERIC_REQUEST = 0x00000002;
