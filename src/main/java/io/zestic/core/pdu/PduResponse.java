@@ -20,7 +20,7 @@ package io.zestic.core.pdu;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PduResponse extends Pdu {
+public abstract class PduResponse extends Pdu {
 
     @JsonProperty("result")
     private String result = Constants.STATUS_MESSAGE_MAP.get(Constants.STATUS_OK);

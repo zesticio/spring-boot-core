@@ -1,11 +1,9 @@
 package io.zestic.core.pdu;
 
-import org.apache.logging.log4j.util.Strings;
-
 public class EnquireLinkRequest extends PduRequest<EnquireLinkResponse> {
 
     public EnquireLinkRequest() {
-        super(Constants.ENQUIRE_LINK);
+        super(Constants.ENQUIRE_LINK_REQUEST);
     }
 
     @Override
@@ -21,26 +19,22 @@ public class EnquireLinkRequest extends PduRequest<EnquireLinkResponse> {
     }
 
     @Override
-    public void setBody(ByteBuffer buffer) throws NotEnoughDataInByteBufferException, TerminatingZeroNotFoundException, PduException {
+    protected void setBody(ByteBuffer buffer) throws NotEnoughDataInByteBufferException,
+            TerminatingZeroNotFoundException, PduException {
     }
 
     @Override
-    public ByteBuffer getBody() {
+    protected ByteBuffer getBody() {
         ByteBuffer buffer = new ByteBuffer();
         return buffer;
     }
 
     @Override
     public String toString() {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(Strings.repeat("-",60));
-        buffer.append(System.getProperty("line.separator"));
-        buffer.append(String.format("%-8s %-32s", "pdu ", "enquire-link"));
-        buffer.append(System.getProperty("line.separator"));
-        buffer.append(String.format("header %-16s", super.toString()));
-        buffer.append(System.getProperty("line.separator"));
-        buffer.append(debugStringOptional());
-        return buffer.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append(super.toString());
+        builder.append(System.getProperty("line.separator"));
+        return builder.toString();
     }
 
     public static void main(String[] args) {

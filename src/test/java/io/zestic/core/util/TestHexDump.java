@@ -1,4 +1,4 @@
-package in.zestic.core.util;
+package io.zestic.core.util;
 
 public class TestHexDump {
 

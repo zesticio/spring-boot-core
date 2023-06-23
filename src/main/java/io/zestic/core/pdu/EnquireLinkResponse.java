@@ -3,22 +3,25 @@ package io.zestic.core.pdu;
 public class EnquireLinkResponse extends PduResponse {
 
     public EnquireLinkResponse() {
-        super(Constants.ENQUIRE_LINK_RESP);
+        super(Constants.ENQUIRE_LINK_RESPONSE);
     }
 
-    public void setBody(ByteBuffer buffer)
+    @Override
+    protected void setBody(ByteBuffer buffer)
             throws NotEnoughDataInByteBufferException,
             TerminatingZeroNotFoundException, PduException {
     }
 
-    public ByteBuffer getBody() {
+    @Override
+    protected ByteBuffer getBody() {
         return null;
     }
 
-    public String hexDump() {
+    @Override
+    public String toString() {
         StringBuilder buffer = new StringBuilder();
-        buffer.append(String.format("%-50s", "enquire-link-response"));
-        buffer.append(String.format("%-50s", super.toString()));
+        buffer.append(super.toString());
+        buffer.append(System.getProperty("line.separator"));
         return buffer.toString();
     }
 }

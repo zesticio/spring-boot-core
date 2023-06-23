@@ -1,11 +1,11 @@
 package io.zestic.core.pdu;
 
-public class GenericMessageResponse extends PduResponse {
+public class ByteBufferResponse extends PduResponse {
 
     private String messageId = "";
 
-    public GenericMessageResponse() {
-        super(Constants.GENERIC_RESPONSE);
+    public ByteBufferResponse() {
+        super(Constants.BYTE_BUFFER_RESPONSE);
     }
 
     public void setMessageId(String value) throws WrongLengthOfStringException {
@@ -17,14 +17,15 @@ public class GenericMessageResponse extends PduResponse {
         return messageId;
     }
 
-    public void setBody(ByteBuffer buffer) throws NotEnoughDataInByteBufferException,
+    @Override
+    protected void setBody(ByteBuffer buffer) throws NotEnoughDataInByteBufferException,
             TerminatingZeroNotFoundException,
             PduException {
         setMessageId(buffer.removeCString());
     }
 
     @Override
-    public ByteBuffer getBody() {
+    protected ByteBuffer getBody() {
         ByteBuffer buffer = new ByteBuffer();
         buffer.appendCString(messageId);
         return buffer;
@@ -32,10 +33,8 @@ public class GenericMessageResponse extends PduResponse {
 
     @Override
     public String toString() {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(String.format("%-50s", "submit-multi-resp"));
-        buffer.append(String.format("%-50s", super.toString()));
-        buffer.append(String.format("%-20s%-30s", "message-id", getMessageId()));
-        return buffer.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append(super.toString());
+        return builder.toString();
     }
 }

@@ -23,26 +23,21 @@ public abstract class ProcessingThread implements Runnable {
     private static final String PROCESSING_THREAD_NAME = "PROCESSING_THREAD";
 
     private static int threadIndex = 0;
-
     private boolean keepProcessing = true;
-
     private final byte PROC_INITIALISING = 0;
-
     private final byte PROC_RECEIVING = 1;
-
     private final byte PROC_FINISHED = 2;
-
     private byte processingStatus = PROC_INITIALISING;
 
     private Object processingStatusLock = new Object();
-
     private Exception termException = null;
-
     private Thread processingThread = null;
+    private Subscriber subscriber;
 
     public abstract void process();
 
-    public void start() throws InterruptedException {
+    public void start(Subscriber subscriber) throws InterruptedException {
+        this.subscriber = subscriber;
         if (!isProcessing()) { // i.e. is initialising or finished
             setProcessingStatus(PROC_INITIALISING);
             termException = null;
@@ -53,6 +48,7 @@ public abstract class ProcessingThread implements Runnable {
             while (isInitialising()) {
                 Thread.yield(); // we're waiting for the proc thread to start
             }
+            if (this.subscriber != null) this.subscriber.onStart();
         }
     }
 
@@ -64,6 +60,7 @@ public abstract class ProcessingThread implements Runnable {
                 Thread.yield(); // we're waiting for the proc thread to stop
             }
         }
+        if (this.subscriber != null) this.subscriber.onStop();
         Runtime.getRuntime().gc();
     }
 
@@ -131,4 +128,12 @@ public abstract class ProcessingThread implements Runnable {
             return processingStatus == PROC_FINISHED;
         }
     }
+
+    public interface Subscriber {
+
+        public void onStart();
+
+        public void onStop();
+    }
+
 }

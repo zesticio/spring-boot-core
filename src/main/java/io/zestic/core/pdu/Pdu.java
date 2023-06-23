@@ -197,7 +197,7 @@ public abstract class Pdu extends ByteData {
      * Default method for setting mandatory parameters of the PDU. Derived classes should overwrite this method if
      * they want to fill their member variables with data from the binary data buffer.
      */
-    public void setBody(ByteBuffer buffer)
+    protected void setBody(ByteBuffer buffer)
             throws NotEnoughDataInByteBufferException,
             TerminatingZeroNotFoundException, PduException {
     }
@@ -206,7 +206,7 @@ public abstract class Pdu extends ByteData {
      * Default method for composing binary representation of the mandatory part of the PDU. Derived classes should
      * overwrite this method with composition of buffer from their member variables.
      */
-    public ByteBuffer getBody() throws ValueNotSetException {
+    protected ByteBuffer getBody() throws ValueNotSetException {
         return null;
     }
 
@@ -481,19 +481,12 @@ public abstract class Pdu extends ByteData {
      * @return
      */
     protected String debugStringOptional() {
-        String dbgs = "";
-        dbgs += debugStringOptional("opt", optionalParameters);
-        dbgs += debugStringOptional("extraopt", extraOptionalParameters);
-        return dbgs;
-    }
-
-
-    public byte[] toBytes() {
-        return SerializationUtils.serialize(this);
-    }
-
-    public String hexDump() {
-        return HexUtil.toHexString(toBytes());
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(String.format("%-4s %s", " ", "optional"));
+        buffer.append(System.getProperty("line.separator"));
+        buffer.append(optionalParameters);
+        buffer.append(extraOptionalParameters);
+        return buffer.toString();
     }
 
     public String toJson() {
@@ -510,14 +503,13 @@ public abstract class Pdu extends ByteData {
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
-        buffer.append("[");
-        buffer.append(String.format("0x%08X 0x%08X 0x%08X 0x%08X ",
-                getCommandLength(),
-                getCommandId(),
-                getCommandStatus(),
-                getSequenceNumber()
-        ));
-        buffer.append("]");
+        buffer.append(String.format("%-4s %s: %s", " ", "length", getCommandLength()));
+        buffer.append(System.getProperty("line.separator"));
+        buffer.append(String.format("%-4s %s: %s", " ", "operation", Constants.COMMAND_SET_MAP.get(getCommandId())));
+        buffer.append(System.getProperty("line.separator"));
+        buffer.append(String.format("%-4s %s: %s", " ", "sequence", getSequenceNumber()));
+        buffer.append(System.getProperty("line.separator"));
+        buffer.append(String.format("%-4s %s: %s", " ", "status", Constants.STATUS_MESSAGE_MAP.get(getCommandStatus())));
         return buffer.toString();
     }
 
