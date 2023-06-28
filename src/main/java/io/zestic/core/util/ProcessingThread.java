@@ -18,10 +18,16 @@
 
 package io.zestic.core.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class ProcessingThread implements Runnable {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProcessingThread.class.getSimpleName());
 
     private static final String PROCESSING_THREAD_NAME = "PROCESSING_THREAD";
 
+    private String name = PROCESSING_THREAD_NAME;
     private static int threadIndex = 0;
     private boolean keepProcessing = true;
     private final byte PROC_INITIALISING = 0;
@@ -32,12 +38,18 @@ public abstract class ProcessingThread implements Runnable {
     private Object processingStatusLock = new Object();
     private Exception termException = null;
     private Thread processingThread = null;
-    private Subscriber subscriber;
 
     public abstract void process();
 
-    public void start(Subscriber subscriber) throws InterruptedException {
-        this.subscriber = subscriber;
+    public ProcessingThread() {
+        this(PROCESSING_THREAD_NAME);
+    }
+
+    public ProcessingThread(String name) {
+        this.name = name;
+    }
+
+    public void start() throws InterruptedException {
         if (!isProcessing()) { // i.e. is initialising or finished
             setProcessingStatus(PROC_INITIALISING);
             termException = null;
@@ -48,7 +60,6 @@ public abstract class ProcessingThread implements Runnable {
             while (isInitialising()) {
                 Thread.yield(); // we're waiting for the proc thread to start
             }
-            if (this.subscriber != null) this.subscriber.onStart();
         }
     }
 
@@ -60,7 +71,6 @@ public abstract class ProcessingThread implements Runnable {
                 Thread.yield(); // we're waiting for the proc thread to stop
             }
         }
-        if (this.subscriber != null) this.subscriber.onStop();
         Runtime.getRuntime().gc();
     }
 
@@ -79,7 +89,6 @@ public abstract class ProcessingThread implements Runnable {
             }
         } catch (Exception e) {
             setTermException(e);
-            e.printStackTrace();
         } finally {
             setProcessingStatus(PROC_FINISHED);
         }
@@ -128,12 +137,4 @@ public abstract class ProcessingThread implements Runnable {
             return processingStatus == PROC_FINISHED;
         }
     }
-
-    public interface Subscriber {
-
-        public void onStart();
-
-        public void onStop();
-    }
-
 }

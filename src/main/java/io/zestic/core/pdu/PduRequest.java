@@ -24,8 +24,7 @@ import lombok.Data;
 @Data
 public abstract class PduRequest<R extends PduResponse> extends Pdu {
 
-    public PduRequest() {
-    }
+    public PduRequest() {}
 
     /**
      * Create request PDU with given command id. Derived classes usually uses

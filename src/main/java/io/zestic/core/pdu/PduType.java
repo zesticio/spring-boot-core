@@ -18,41 +18,42 @@
 
 package io.zestic.core.pdu;
 
+import io.zestic.core.util.HTTPErrorCodes;
+
 import java.util.HashMap;
 import java.util.Map;
-import io.zestic.core.util.HTTPErrorCodes;
 
 /**
  * Error code for USER module.
  */
 public enum PduType {
 
-  TEXT_MESSAGE(0x100000, "Test Message"),
-  OBJECT_MESSAGE(0x100001, "Object Message");
+    TEXT_MESSAGE(0x100000, "Test Message"),
+    OBJECT_MESSAGE(0x100001, "Object Message");
 
-  private static final Map<Integer, HTTPErrorCodes> LOOKUP = new HashMap<Integer, HTTPErrorCodes>();
+    private static final Map<Integer, HTTPErrorCodes> LOOKUP = new HashMap<Integer, HTTPErrorCodes>();
 
-  static {
-    for (final HTTPErrorCodes enumeration : HTTPErrorCodes.values()) {
-      LOOKUP.put(enumeration.getCode(), enumeration);
+    static {
+        for (final HTTPErrorCodes enumeration : HTTPErrorCodes.values()) {
+            LOOKUP.put(enumeration.getCode(), enumeration);
+        }
     }
-  }
 
-  private final Integer code;
+    private final Integer code;
 
-  private final String message;
+    private final String message;
 
-  private PduType(final Integer code, final String message) {
-    this.code = code;
-    this.message = message;
-  }
+    private PduType(final Integer code, final String message) {
+        this.code = code;
+        this.message = message;
+    }
 
-  public Integer getCode() {
-    return code;
-  }
+    public Integer getCode() {
+        return code;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
 }

@@ -21,10 +21,8 @@ package io.zestic.core.pdu;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zestic.core.exception.InvalidPDUException;
-import io.zestic.core.util.HexUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.SerializationUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;

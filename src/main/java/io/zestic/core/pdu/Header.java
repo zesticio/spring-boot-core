@@ -18,8 +18,6 @@
 
 package io.zestic.core.pdu;
 
-import io.zestic.core.exception.GenericError;
-
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 

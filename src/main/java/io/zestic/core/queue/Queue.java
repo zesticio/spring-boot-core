@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -64,12 +65,14 @@ public class Queue {
             (byte) 0xB2,
             (byte) 0x77};
     private ConcurrentLinkedQueue<Pdu> queue;
-    private Integer counter = 0;
+    private AtomicInteger counter;
 
     public Queue() {
+        counter = new AtomicInteger(0);
     }
 
     public Queue(Builder builder) {
+        this();
     }
 
     /**
@@ -102,6 +105,7 @@ public class Queue {
                 notFull.await();
             }
             queue.add(pdu);
+            counter.incrementAndGet();
             notEmpty.signal(); // Signal notEmpty condition
         } catch (InterruptedException ex) {
             logger.error("", ex);
@@ -123,6 +127,7 @@ public class Queue {
                 notEmpty.await();
             }
             result = queue.poll();
+            counter.decrementAndGet();
             notFull.signal(); // Signal notFull condition
         } catch (InterruptedException ex) {
             logger.error("", ex);
@@ -142,6 +147,10 @@ public class Queue {
 
     public Boolean isEmpty() {
         return queue.isEmpty();
+    }
+
+    public Integer size() {
+        return counter.get();
     }
 
     public static class Builder implements IBuilder<Queue> {
